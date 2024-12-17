@@ -1,4 +1,3 @@
-
 import { Devvit } from '@devvit/public-api';
 import { useState } from '@devvit/public-api';
 
@@ -7,11 +6,11 @@ Devvit.configure({
 });
 
 const LOCATIONS = [
-  { name: 'Mount Fuji, Japan', image: new URL('./assets/japan.jpg', import.meta.url).href },
-  { name: 'Paris, France', image: new URL('./assets/france.jpg', import.meta.url).href },
-  { name: 'Sydney, Australia', image: new URL('./assets/australia.jpg', import.meta.url).href },
-  { name: 'New York, USA', image: new URL('./assets/usa.jpg', import.meta.url).href },
-  { name: 'London, UK', image: new URL('./assets/uk.jpg', import.meta.url).href }
+  { name: 'Mount Fuji, Japan', image: './assets/japan.jpg' },
+  { name: 'Paris, France', image: './assets/france.jpg' },
+  { name: 'Sydney, Australia', image: './assets/australia.jpg' },
+  { name: 'New York, USA', image: './assets/usa.jpg' },
+  { name: 'London, UK', image: './assets/uk.jpg' }
 ];
 
 Devvit.addCustomPostType({
