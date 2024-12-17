@@ -1,0 +1,45 @@
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#gameScreen {
+  text-align: center;
+}
+
+#imageContainer {
+  margin-bottom: 20px;
+}
+
+#countryImage {
+  max-width: 100%;
+  height: auto;
+}
+
+#timer {
+  font-size: 24px;
+  margin: 20px 0;
+}
+
+input {
+  padding: 10px;
+  margin: 10px;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background: #0079d3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}

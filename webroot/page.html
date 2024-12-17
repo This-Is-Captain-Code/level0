@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>GeoGuessr Game</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div id="gameScreen">
+      <div id="imageContainer">
+        <img id="countryImage" src="../assets/france.jpg" alt="Guess the country">
+      </div>
+      <div id="timer">Time left: <span id="timeLeft">5</span>s</div>
+      <div id="inputSection" style="display: none;">
+        <input type="text" id="answer" placeholder="Enter country name">
+        <button id="submitBtn">Submit Answer</button>
+      </div>
+      <div id="result" style="display: none;"></div>
+      <button id="playAgain" style="display: none;">Play Again</button>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
