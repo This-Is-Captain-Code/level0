@@ -7,11 +7,11 @@ Devvit.configure({
 });
 
 const LOCATIONS = [
-  { name: 'Mount Fuji, Japan', image: require('./assets/japan.jpg') },
-  { name: 'Paris, France', image: require('./assets/france.jpg') },
-  { name: 'Sydney, Australia', image: require('./assets/australia.jpg') },
-  { name: 'New York, USA', image: require('./assets/usa.jpg') },
-  { name: 'London, UK', image: require('./assets/uk.jpg') }
+  { name: 'Mount Fuji, Japan', image: new URL('./assets/japan.jpg', import.meta.url).href },
+  { name: 'Paris, France', image: new URL('./assets/france.jpg', import.meta.url).href },
+  { name: 'Sydney, Australia', image: new URL('./assets/australia.jpg', import.meta.url).href },
+  { name: 'New York, USA', image: new URL('./assets/usa.jpg', import.meta.url).href },
+  { name: 'London, UK', image: new URL('./assets/uk.jpg', import.meta.url).href }
 ];
 
 Devvit.addCustomPostType({
