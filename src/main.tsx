@@ -7,11 +7,11 @@ Devvit.configure({
 });
 
 const LOCATIONS = [
-  { name: 'Mount Fuji, Japan', image: 'assets/japan.jpg'},
-  { name: 'Paris, France', image: 'assets/france.jpg'},
-  { name: 'Sydney, Australia', image: 'assets/australia.jpg'},
-  { name: 'New York, USA', image: 'assets/usa.jpg'},
-  { name: 'London, UK', image: 'assets/uk.jpg'}
+  { name: 'Mount Fuji, Japan', image: require('./assets/japan.jpg') },
+  { name: 'Paris, France', image: require('./assets/france.jpg') },
+  { name: 'Sydney, Australia', image: require('./assets/australia.jpg') },
+  { name: 'New York, USA', image: require('./assets/usa.jpg') },
+  { name: 'London, UK', image: require('./assets/uk.jpg') }
 ];
 
 Devvit.addCustomPostType({
@@ -37,7 +37,6 @@ Devvit.addCustomPostType({
         feedback: ''
       });
 
-      // Hide image after 5 seconds
       setTimeout(() => {
         setGameState(prev => ({ ...prev, showImage: false }));
       }, 5000);
@@ -53,7 +52,6 @@ Devvit.addCustomPostType({
 
       context.ui.showToast(feedback);
 
-      // Move to next location
       const nextIndex = Math.floor(Math.random() * LOCATIONS.length);
       setGameState({
         score: newScore,
@@ -70,39 +68,42 @@ Devvit.addCustomPostType({
     };
 
     return (
-      <vstack gap="medium" alignment="center">
-        <text size="xlarge">GeoGuessr Challenge</text>
-        {!gameState.gameStarted ? (
-          <button appearance="primary" onPress={startGame}>
-            Start Game
-          </button>
-        ) : (
-          <vstack gap="medium" alignment="center">
-            <text size="large">Score: {gameState.score}</text>
-            {gameState.showImage && (
-              <image
-                url={LOCATIONS[gameState.currentLocationIndex].image}
-                height={300}
-              />
-            )}
-            {!gameState.showImage && (
-              <vstack gap="small">
-                <textinput
-                  placeholder="Enter location name..."
-                  value={gameState.guess}
-                  onChange={value => setGameState(prev => ({ ...prev, guess: value }))}
+      <blocks>
+        <vstack gap="medium" alignment="center">
+          <text size="xlarge">GeoGuessr Challenge</text>
+          {!gameState.gameStarted ? (
+            <button appearance="primary" onPress={startGame}>
+              Start Game
+            </button>
+          ) : (
+            <vstack gap="medium" alignment="center">
+              <text size="large">Score: {gameState.score}</text>
+              {gameState.showImage && gameState.currentLocationIndex !== -1 && (
+                <image 
+                  source={LOCATIONS[gameState.currentLocationIndex].image} 
+                  width={300}
+                  height={200}
                 />
-                <button onPress={handleGuess}>
-                  Submit Guess
-                </button>
-              </vstack>
-            )}
-            {gameState.feedback && (
-              <text>{gameState.feedback}</text>
-            )}
-          </vstack>
-        )}
-      </vstack>
+              )}
+              {!gameState.showImage && (
+                <vstack gap="small">
+                  <textinput
+                    placeholder="Enter location name..."
+                    value={gameState.guess}
+                    onChange={value => setGameState(prev => ({ ...prev, guess: value }))}
+                  />
+                  <button onPress={handleGuess}>
+                    Submit Guess
+                  </button>
+                </vstack>
+              )}
+              {gameState.feedback && (
+                <text>{gameState.feedback}</text>
+              )}
+            </vstack>
+          )}
+        </vstack>
+      </blocks>
     );
   }
 });
