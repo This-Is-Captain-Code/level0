@@ -1,57 +1,57 @@
-// Learn more at developers.reddit.com/docs
+
 import { Devvit, useState } from '@devvit/public-api';
 
 Devvit.configure({
   redditAPI: true,
 });
 
-// Add a menu item to the subreddit menu for instantiating the new experience post
+Devvit.addCustomPostType({
+  name: 'GeoGuessr Game',
+  height: 'regular',
+  render: (context) => {
+    const [gameStarted, setGameStarted] = useState(false);
+    
+    return (
+      <vstack backgroundColor="white" height="100%" width="100%" gap="medium" alignment="center middle">
+        {!gameStarted ? (
+          <button appearance="primary" onPress={() => setGameStarted(true)}>
+            Start Game
+          </button>
+        ) : (
+          <vstack gap="medium" alignment="center middle">
+            <image
+              url="france.jpg"
+              description="Guess the country"
+              imageHeight={400}
+              imageWidth={600}
+            />
+            <text size="large">Guess the country!</text>
+          </vstack>
+        )}
+      </vstack>
+    );
+  },
+});
+
 Devvit.addMenuItem({
-  label: 'Test Post',
+  label: 'Create GeoGuessr Game',
   location: 'subreddit',
   forUserType: 'moderator',
   onPress: async (_event, context) => {
     const { reddit, ui } = context;
-    ui.showToast("Submitting your post - upon completion you'll navigate there.");
+    ui.showToast("Creating GeoGuessr game post...");
 
     const subreddit = await reddit.getCurrentSubreddit();
     const post = await reddit.submitPost({
-      title: 'My devvit post',
+      title: 'GeoGuessr Game',
       subredditName: subreddit.name,
-      // The preview appears while the post loads
       preview: (
         <vstack height="100%" width="100%" alignment="middle center">
-          <text size="large">Loading ...</text>
+          <text size="large">Loading game...</text>
         </vstack>
       ),
     });
     ui.navigateTo(post);
-  },
-});
-
-// Add a post type definition
-Devvit.addCustomPostType({
-  name: 'Experience Post',
-  height: 'regular',
-  render: (_context) => {
-    const [counter, setCounter] = useState(0);
-
-    return (
-      <vstack backgroundColor= "white" height="100%" width="100%" gap="medium" alignment="center middle">
-        <image
-          url="logo.png"
-          description="logo"
-          imageHeight={256}
-          imageWidth={256}
-          height="48px"
-          width="48px"
-        />
-        <text size="large">{`Click counter: ${counter}`}</text>
-        <button appearance="primary" onPress={() => setCounter((counter) => counter + 1)}>
-          Click me!
-        </button>
-      </vstack>
-    );
   },
 });
 
