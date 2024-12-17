@@ -1,5 +1,5 @@
 
-import { Devvit, useState } from '@devvit/public-api';
+import { Devvit, useState, useEffect } from '@devvit/public-api';
 
 Devvit.configure({
   redditAPI: true,
@@ -10,6 +10,35 @@ Devvit.addCustomPostType({
   height: 'regular',
   render: (context) => {
     const [gameStarted, setGameStarted] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(5);
+    const [showImage, setShowImage] = useState(true);
+    const [userAnswer, setUserAnswer] = useState('');
+    const [submitted, setSubmitted] = useState(false);
+    const correctAnswer = 'France';
+    
+    useEffect(() => {
+      let timer;
+      if (gameStarted && timeLeft > 0 && showImage) {
+        timer = setTimeout(() => {
+          setTimeLeft(prev => prev - 1);
+        }, 1000);
+      } else if (timeLeft === 0) {
+        setShowImage(false);
+      }
+      return () => clearTimeout(timer);
+    }, [timeLeft, gameStarted, showImage]);
+
+    const handleSubmit = () => {
+      setSubmitted(true);
+    };
+
+    const resetGame = () => {
+      setGameStarted(false);
+      setTimeLeft(5);
+      setShowImage(true);
+      setUserAnswer('');
+      setSubmitted(false);
+    };
     
     return (
       <vstack backgroundColor="white" height="100%" width="100%" gap="medium" alignment="center middle">
@@ -19,13 +48,43 @@ Devvit.addCustomPostType({
           </button>
         ) : (
           <vstack gap="medium" alignment="center middle">
-            <image
-              url="france.jpg"
-              description="Guess the country"
-              imageHeight={400}
-              imageWidth={600}
-            />
-            <text size="large">Guess the country!</text>
+            {showImage ? (
+              <>
+                <image
+                  url="france.jpg"
+                  description="Guess the country"
+                  imageHeight={400}
+                  imageWidth={600}
+                />
+                <text size="large">Time left: {timeLeft}s</text>
+              </>
+            ) : (
+              <vstack gap="medium" alignment="center middle">
+                {!submitted ? (
+                  <>
+                    <textbox
+                      placeholder="Enter country name"
+                      value={userAnswer}
+                      onValueChange={setUserAnswer}
+                    />
+                    <button appearance="primary" onPress={handleSubmit}>
+                      Submit Answer
+                    </button>
+                  </>
+                ) : (
+                  <vstack gap="medium" alignment="center middle">
+                    <text size="large">
+                      {userAnswer.toLowerCase() === correctAnswer.toLowerCase() 
+                        ? "Correct!" 
+                        : `Wrong! The answer was ${correctAnswer}`}
+                    </text>
+                    <button appearance="primary" onPress={resetGame}>
+                      Play Again
+                    </button>
+                  </vstack>
+                )}
+              </vstack>
+            )}
           </vstack>
         )}
       </vstack>
