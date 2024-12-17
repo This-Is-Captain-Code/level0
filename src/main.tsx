@@ -1,16 +1,22 @@
 import { Devvit } from '@devvit/public-api';
 import { useState } from '@devvit/public-api';
 
+const japanImage = Devvit.use.asset('assets/japan.jpg');
+const franceImage = Devvit.use.asset('assets/france.jpg');
+const australiaImage = Devvit.use.asset('assets/australia.jpg');
+const usaImage = Devvit.use.asset('assets/usa.jpg');
+const ukImage = Devvit.use.asset('assets/uk.jpg');
+
 Devvit.configure({
   redditAPI: true,
 });
 
 const LOCATIONS = [
-  { name: 'Mount Fuji, Japan', image: './assets/japan.jpg' },
-  { name: 'Paris, France', image: './assets/france.jpg' },
-  { name: 'Sydney, Australia', image: './assets/australia.jpg' },
-  { name: 'New York, USA', image: './assets/usa.jpg' },
-  { name: 'London, UK', image: './assets/uk.jpg' }
+  { name: 'Mount Fuji, Japan', image: japanImage },
+  { name: 'Paris, France', image: franceImage },
+  { name: 'Sydney, Australia', image: australiaImage },
+  { name: 'New York, USA', image: usaImage },
+  { name: 'London, UK', image: ukImage }
 ];
 
 Devvit.addCustomPostType({
