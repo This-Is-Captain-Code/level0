@@ -99,7 +99,7 @@ Devvit.addCustomPostType({
             </html>
           `;
           
-          context.ui.showWebView({ html, height: '600px' });
+          context.ui.openUrl('https://geoguessr-game.replit.app');
         }}>
           Play Game
         </button>
