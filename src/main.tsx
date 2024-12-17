@@ -7,11 +7,11 @@ Devvit.configure({
 });
 
 const LOCATIONS = [
-  { name: 'Mount Fuji, Japan', image: 'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65'},
-  { name: 'Paris, France', image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34'},
-  { name: 'Sydney, Australia', image: 'https://images.unsplash.com/photo-1523482580672-f109ba88220b'},
-  { name: 'New York, USA', image: 'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee'},
-  { name: 'London, UK', image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad'}
+  { name: 'Mount Fuji, Japan', image: 'assets/japan.jpg'},
+  { name: 'Paris, France', image: 'assets/france.jpg'},
+  { name: 'Sydney, Australia', image: 'assets/australia.jpg'},
+  { name: 'New York, USA', image: 'assets/usa.jpg'},
+  { name: 'London, UK', image: 'assets/uk.jpg'}
 ];
 
 Devvit.addCustomPostType({
