@@ -3,14 +3,21 @@ import { Devvit, useState } from '@devvit/public-api';
 
 Devvit.configure({
   redditAPI: true,
+  assets: {
+    'japan.jpg': './assets/japan.jpg',
+    'france.jpg': './assets/france.jpg',
+    'australia.jpg': './assets/australia.jpg',
+    'usa.jpg': './assets/usa.jpg',
+    'uk.jpg': './assets/uk.jpg',
+  },
 });
 
 const LOCATIONS = [
-  { region: 'Asia', country: 'Japan', image: 'https://i.imgur.com/japan.jpg' },
-  { region: 'Europe', country: 'France', image: 'https://i.imgur.com/france.jpg' },
-  { region: 'Oceania', country: 'Australia', image: 'https://i.imgur.com/australia.jpg' },
-  { region: 'North America', country: 'USA', image: 'https://i.imgur.com/usa.jpg' },
-  { region: 'Europe', country: 'UK', image: 'https://i.imgur.com/uk.jpg' },
+  { region: 'Asia', country: 'Japan', image: 'japan.jpg' },
+  { region: 'Europe', country: 'France', image: 'france.jpg' },
+  { region: 'Oceania', country: 'Australia', image: 'australia.jpg' },
+  { region: 'North America', country: 'USA', image: 'usa.jpg' },
+  { region: 'Europe', country: 'UK', image: 'uk.jpg' },
 ];
 
 const REGIONS = ['Asia', 'Europe', 'North America', 'South America', 'Africa', 'Oceania'];
