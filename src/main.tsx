@@ -83,7 +83,7 @@ Devvit.addCustomPostType({
             {showImage ? (
               <vstack gap="small">
                 <text size="large">Memorize this location!</text>
-                <image source={context.ui.asset(LOCATIONS[currentLocation].image)} />
+                <image source={context.assets.get(LOCATIONS[currentLocation].image)} />
                 <text>Time remaining: 5 seconds</text>
               </vstack>
             ) : (
