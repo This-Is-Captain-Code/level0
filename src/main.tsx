@@ -1,5 +1,6 @@
 
 import { Devvit } from '@devvit/public-api';
+import { useState } from '@devvit/public-api';
 
 Devvit.configure({
   redditAPI: true,
@@ -21,88 +22,90 @@ Devvit.addMenuItem({
   },
 });
 
+const LOCATIONS = [
+  { country: 'Japan', image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989'},
+  { country: 'France', image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34'},
+  { country: 'Australia', image: 'https://images.unsplash.com/photo-1523482580672-f109ba88220b'},
+  { country: 'USA', image: 'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee'},
+  { country: 'UK', image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad'}
+];
+
 Devvit.addCustomPostType({
   name: 'GeoGuessr Game',
   render: (context) => {
+    const [gameState, setGameState] = useState({
+      score: 0,
+      currentLocationIndex: -1,
+      showImage: false,
+      gameStarted: false
+    });
+
+    const startGame = () => {
+      const randomIndex = Math.floor(Math.random() * LOCATIONS.length);
+      setGameState({
+        score: 0,
+        currentLocationIndex: randomIndex,
+        showImage: true,
+        gameStarted: true
+      });
+
+      setTimeout(() => {
+        setGameState(prev => ({ ...prev, showImage: false }));
+      }, 5000);
+    };
+
+    const handleGuess = (guessedCountry: string) => {
+      const correct = LOCATIONS[gameState.currentLocationIndex].country === guessedCountry;
+      const newScore = correct ? gameState.score + 100 : gameState.score;
+      
+      context.ui.showToast(correct ? 
+        `Correct! +100 points` : 
+        `Wrong! It was ${LOCATIONS[gameState.currentLocationIndex].country}`
+      );
+
+      const nextIndex = Math.floor(Math.random() * LOCATIONS.length);
+      setGameState({
+        score: newScore,
+        currentLocationIndex: nextIndex,
+        showImage: true,
+        gameStarted: true
+      });
+
+      setTimeout(() => {
+        setGameState(prev => ({ ...prev, showImage: false }));
+      }, 5000);
+    };
+
     return (
       <vstack gap="medium" alignment="center">
         <text size="xlarge">GeoGuessr Challenge</text>
-        <button onPress={async () => {
-          const html = `
-            <!DOCTYPE html>
-            <html>
-              <head>
-                <style>
-                  body { font-family: Arial; margin: 20px; }
-                  #gameContainer { max-width: 800px; margin: auto; }
-                  .button { padding: 10px 20px; margin: 5px; cursor: pointer; }
-                  #locationImage { max-width: 100%; height: auto; }
-                </style>
-              </head>
-              <body>
-                <div id="gameContainer">
-                  <h1>GeoGuessr Challenge</h1>
-                  <div id="gameArea">
-                    <img id="locationImage" style="display: none;">
-                    <div id="options"></div>
-                  </div>
-                  <p id="score">Score: 0</p>
-                  <button class="button" onclick="startGame()">Start Game</button>
-                </div>
-                <script>
-                  const locations = [
-                    { country: 'Japan', image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989'},
-                    { country: 'France', image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34'},
-                    { country: 'Australia', image: 'https://images.unsplash.com/photo-1523482580672-f109ba88220b'},
-                    { country: 'USA', image: 'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee'},
-                    { country: 'UK', image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad'}
-                  ];
-                  let currentLocation;
-                  let score = 0;
-                  
-                  function startGame() {
-                    score = 0;
-                    document.getElementById('score').textContent = 'Score: 0';
-                    showNextLocation();
-                  }
-                  
-                  function showNextLocation() {
-                    currentLocation = locations[Math.floor(Math.random() * locations.length)];
-                    const img = document.getElementById('locationImage');
-                    img.src = currentLocation.image;
-                    img.style.display = 'block';
-                    
-                    const options = locations.map(l => l.country);
-                    const optionsHtml = options.map(country => 
-                      \`<button class="button" onclick="guess('\${country}')">\${country}</button>\`
-                    ).join('');
-                    
-                    document.getElementById('options').innerHTML = optionsHtml;
-                    
-                    setTimeout(() => {
-                      img.style.display = 'none';
-                    }, 5000);
-                  }
-                  
-                  function guess(country) {
-                    if (country === currentLocation.country) {
-                      score += 100;
-                      alert('Correct! +100 points');
-                    } else {
-                      alert('Wrong! The correct answer was ' + currentLocation.country);
-                    }
-                    document.getElementById('score').textContent = 'Score: ' + score;
-                    showNextLocation();
-                  }
-                </script>
-              </body>
-            </html>
-          `;
-          
-          context.ui.openUrl('https://geoguessr-game.replit.app');
-        }}>
-          Play Game
-        </button>
+        {!gameState.gameStarted ? (
+          <button appearance="primary" onPress={startGame}>
+            Start Game
+          </button>
+        ) : (
+          <vstack gap="medium" alignment="center">
+            <text size="large">Score: {gameState.score}</text>
+            {gameState.showImage && (
+              <image
+                url={LOCATIONS[gameState.currentLocationIndex].image}
+                height={300}
+              />
+            )}
+            {!gameState.showImage && (
+              <vstack gap="small">
+                {LOCATIONS.map((location) => (
+                  <button
+                    key={location.country}
+                    onPress={() => handleGuess(location.country)}
+                  >
+                    {location.country}
+                  </button>
+                ))}
+              </vstack>
+            )}
+          </vstack>
+        )}
       </vstack>
     );
   }
