@@ -41,7 +41,7 @@ Devvit.addMenuItem({
 
 Devvit.addCustomPostType({
   name: 'GeoGuessr Game',
-  render: (_context) => {
+  render: (context) => {
     const [currentLocation, setCurrentLocation] = useState(0);
     const [score, setScore] = useState(0);
     const [gameState, setGameState] = useState('start');
@@ -83,7 +83,7 @@ Devvit.addCustomPostType({
             {showImage ? (
               <vstack gap="small">
                 <text size="large">Memorize this location!</text>
-                <image source={LOCATIONS[currentLocation].image} />
+                <image source={context.ui.asset(LOCATIONS[currentLocation].image)} />
                 <text>Time remaining: 5 seconds</text>
               </vstack>
             ) : (
