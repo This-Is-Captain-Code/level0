@@ -8,12 +8,16 @@ Devvit.addCustomPostType({
   height: 'tall',
   render: (context) => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.data.type === 'getRedditUsername') {
-        const username = context.userId ? context.userId : 'anonymous';
-        event.source?.postMessage({ 
-          type: 'redditUsername', 
-          username 
-        }, '*');
+      if (event.data && typeof event.data === 'object' && 'type' in event.data) {
+        if (event.data.type === 'getRedditUsername') {
+          const username = context.userId ? context.userId : 'anonymous';
+          if (event.source && 'postMessage' in event.source) {
+            event.source.postMessage({ 
+              type: 'redditUsername', 
+              username 
+            }, '*');
+          }
+        }
       }
     };
 
