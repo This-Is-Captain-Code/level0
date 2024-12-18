@@ -11,12 +11,19 @@ const countries = [
 let currentCountry;
 let score = 0;
 let currentRound = 0;
+let unusedCountries = [...countries];
 
 function getRandomCountry() {
-  return countries[Math.floor(Math.random() * countries.length)];
+  const randomIndex = Math.floor(Math.random() * unusedCountries.length);
+  const country = unusedCountries[randomIndex];
+  unusedCountries.splice(randomIndex, 1);
+  return country;
 }
 
 function startGame() {
+  if (unusedCountries.length === 0) {
+    unusedCountries = [...countries];
+  }
   currentCountry = getRandomCountry();
   const image = document.getElementById('countryImage');
   const timerDisplay = document.getElementById('timeLeft');
@@ -84,6 +91,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
 document.getElementById('playAgain').addEventListener('click', () => {
   score = 0;
   currentRound = 0;
+  unusedCountries = [...countries];
   location.reload();
 });
 
