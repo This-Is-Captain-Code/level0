@@ -78,6 +78,7 @@ function nextRound() {
     result.style.display = 'block';
     result.textContent = `Game Over! Final Score: ${score}/5`;
     playAgain.style.display = 'block';
+    document.getElementById('uploadSection').style.display = 'block';
   }
 }
 
@@ -121,7 +122,10 @@ document.getElementById('playAgain').addEventListener('click', () => {
   score = 0;
   currentRound = 0;
   unusedCountries = [...countries];
-  location.reload();
+  document.getElementById('uploadSection').style.display = 'none';
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('playAgain').style.display = 'none';
+  startGame();
 });
 
 document.getElementById('uploadBtn').addEventListener('click', () => {
