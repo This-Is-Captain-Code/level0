@@ -1,25 +1,13 @@
 
 let timer;
-let correctAnswer;
-
-function getUrlParams() {
-  const params = new URLSearchParams(window.location.search);
-  return {
-    imageUrl: params.get('imageUrl'),
-    answer: params.get('answer')
-  };
-}
+const correctAnswer = 'France';
 
 function startGame() {
-  const { imageUrl, answer } = getUrlParams();
-  correctAnswer = answer;
-  
   const image = document.getElementById('countryImage');
   const timerDisplay = document.getElementById('timeLeft');
   const inputSection = document.getElementById('inputSection');
-  let timeLeft = 10;
+  let timeLeft = 5;
 
-  image.src = imageUrl;
   image.style.display = 'block';
   timerDisplay.textContent = timeLeft;
 
