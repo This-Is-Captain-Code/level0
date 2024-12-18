@@ -3,24 +3,27 @@ let timer;
 let correctAnswer = '';
 let gameImage = '';
 
-function getUrlParams() {
-  const params = new URLSearchParams(window.location.search);
-  return {
-    imageUrl: params.get('imageUrl'),
-    answer: params.get('answer')
-  };
-}
-
-window.onload = () => {
-  const { imageUrl, answer } = getUrlParams();
-  if (imageUrl && answer) {
-    gameImage = imageUrl;
-    correctAnswer = answer;
-    document.getElementById('createScreen').style.display = 'none';
-    document.getElementById('gameScreen').style.display = 'block';
-    startGame();
+document.getElementById('createBtn').addEventListener('click', () => {
+  const fileInput = document.getElementById('imageUpload');
+  const locationInput = document.getElementById('correctLocation');
+  
+  if (fileInput.files.length > 0 && locationInput.value) {
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      gameImage = e.target.result;
+      correctAnswer = locationInput.value;
+      document.getElementById('createScreen').style.display = 'none';
+      document.getElementById('gameScreen').style.display = 'block';
+      startGame();
+    };
+    
+    reader.readAsDataURL(file);
+  } else {
+    alert('Please upload an image and enter the correct location');
   }
-};
+});
 
 function startGame() {
   const image = document.getElementById('countryImage');
