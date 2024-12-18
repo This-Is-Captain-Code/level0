@@ -10,10 +10,19 @@
   <div class="container">
     <div id="startScreen">
       <button id="startBtn">Start Game</button>
+      <button id="viewLeaderboardBtn">View Leaderboard</button>
     </div>
-    <div id="leaderboard">
+    <div id="leaderboard" style="display: none;">
       <h2>Top Scores</h2>
       <div id="leaderboardList"></div>
+      <button id="backFromLeaderboard">Back</button>
+    </div>
+    <div id="uploadScreen" style="display: none;">
+      <h3>Add New Country</h3>
+      <input type="text" id="countryName" placeholder="Enter country name">
+      <input type="file" id="countryImageUpload" accept="image/*">
+      <button id="uploadBtn">Add Country</button>
+      <button id="backFromUpload">Back to Game</button>
     </div>
     <div id="gameScreen" style="display: none;">
       <div id="imageContainer">
@@ -27,12 +36,7 @@
       </div>
       <div id="result" style="display: none;"></div>
       <button id="playAgain" style="display: none;">Play Again</button>
-    </div>
-    <div id="uploadSection">
-      <h3>Add New Country</h3>
-      <input type="text" id="countryName" placeholder="Enter country name">
-      <input type="file" id="countryImageUpload" accept="image/*">
-      <button id="uploadBtn">Add Country</button>
+      <button id="addCountryBtn" style="display: none;">Add New Country</button>
     </div>
   </div>
   <script src="app.js"></script>

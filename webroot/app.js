@@ -78,7 +78,7 @@ function nextRound() {
     result.style.display = 'block';
     result.textContent = `Game Over! Final Score: ${score}/5`;
     playAgain.style.display = 'block';
-    document.getElementById('uploadSection').style.display = 'block';
+    document.getElementById('addCountryBtn').style.display = 'block';
     addToLeaderboard(score);
   }
 }
@@ -183,6 +183,27 @@ document.getElementById('startBtn').addEventListener('click', () => {
   startGame();
 });
 
-window.onload = () => {
+document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('leaderboard').style.display = 'block';
   updateLeaderboard();
+});
+
+document.getElementById('backFromLeaderboard').addEventListener('click', () => {
+  document.getElementById('leaderboard').style.display = 'none';
+  document.getElementById('startScreen').style.display = 'block';
+});
+
+document.getElementById('addCountryBtn').addEventListener('click', () => {
+  document.getElementById('gameScreen').style.display = 'none';
+  document.getElementById('uploadScreen').style.display = 'block';
+});
+
+document.getElementById('backFromUpload').addEventListener('click', () => {
+  document.getElementById('uploadScreen').style.display = 'none';
+  document.getElementById('gameScreen').style.display = 'block';
+});
+
+window.onload = () => {
+  document.getElementById('startScreen').style.display = 'block';
 };
