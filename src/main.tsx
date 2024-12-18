@@ -26,11 +26,11 @@ Devvit.addCustomPostType({
             onChange={(e) => setAnswer(e.target.value)} 
           />
           <button 
-            onPress={() => {
+            onPress={async () => {
               if (imageUrl && answer) {
+                await context.redis.set('image', imageUrl);
+                await context.redis.set('answer', answer.toLowerCase());
                 setGameState('play');
-                context.redis.set('image', imageUrl);
-                context.redis.set('answer', answer.toLowerCase());
               }
             }}
           >
@@ -49,7 +49,7 @@ Devvit.addCustomPostType({
             onChange={(e) => setUserGuess(e.target.value)}
           />
           <button
-            onPress={() => {
+            onPress={async () => {
               if (userGuess.toLowerCase() === answer.toLowerCase()) {
                 setResult('Correct!');
               } else {
