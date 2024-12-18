@@ -170,16 +170,28 @@ function updateLeaderboard() {
     .forEach((entry, index) => {
       const div = document.createElement('div');
       div.className = 'leaderboard-entry';
-      div.textContent = `${index + 1}. Score: ${entry.score}`;
+      div.textContent = `${index + 1}. u/${entry.username} - Score: ${entry.score}`;
       leaderboardList.appendChild(div);
     });
 }
 
 function addToLeaderboard(score) {
-  const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
-  leaderboard.push({ score, date: new Date().toISOString() });
-  localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
-  updateLeaderboard();
+  // Get username from Reddit context
+  window.parent.postMessage({ type: 'getRedditUsername' }, '*');
+  window.addEventListener('message', function handleMessage(e) {
+    if (e.data.type === 'redditUsername') {
+      const username = e.data.username;
+      const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+      leaderboard.push({ 
+        username, 
+        score, 
+        date: new Date().toISOString() 
+      });
+      localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+      updateLeaderboard();
+      window.removeEventListener('message', handleMessage);
+    }
+  });
 }
 
 document.getElementById('startBtn').addEventListener('click', () => {
