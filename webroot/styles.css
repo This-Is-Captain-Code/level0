@@ -23,7 +23,7 @@
   height: auto;
 }
 
-#timer {
+#timer, #scoreDisplay {
   font-size: 24px;
   margin: 20px 0;
 }

@@ -1,15 +1,33 @@
 
 let timer;
-const correctAnswer = 'France';
+const countries = [
+  { image: 'assets/france.jpg', name: 'France' },
+  { image: 'assets/japan.jpg', name: 'Japan' },
+  { image: 'assets/usa.jpg', name: 'USA' },
+  { image: 'assets/uk.jpg', name: 'UK' },
+  { image: 'assets/australia.jpg', name: 'Australia' }
+];
+
+let currentCountry;
+let score = 0;
+let currentRound = 0;
+
+function getRandomCountry() {
+  return countries[Math.floor(Math.random() * countries.length)];
+}
 
 function startGame() {
+  currentCountry = getRandomCountry();
   const image = document.getElementById('countryImage');
   const timerDisplay = document.getElementById('timeLeft');
   const inputSection = document.getElementById('inputSection');
+  const scoreDisplay = document.getElementById('score');
   let timeLeft = 5;
 
+  image.src = currentCountry.image;
   image.style.display = 'block';
   timerDisplay.textContent = timeLeft;
+  scoreDisplay.textContent = score;
 
   timer = setInterval(() => {
     timeLeft--;
@@ -23,21 +41,49 @@ function startGame() {
   }, 1000);
 }
 
-document.getElementById('submitBtn').addEventListener('click', () => {
-  const userAnswer = document.getElementById('answer').value;
+function nextRound() {
+  currentRound++;
   const result = document.getElementById('result');
   const playAgain = document.getElementById('playAgain');
   const inputSection = document.getElementById('inputSection');
+  const answer = document.getElementById('answer');
+
+  result.style.display = 'none';
+  inputSection.style.display = 'none';
+  answer.value = '';
+
+  if (currentRound < 5) {
+    startGame();
+  } else {
+    result.style.display = 'block';
+    result.textContent = `Game Over! Final Score: ${score}/5`;
+    playAgain.style.display = 'block';
+  }
+}
+
+document.getElementById('submitBtn').addEventListener('click', () => {
+  const userAnswer = document.getElementById('answer').value;
+  const result = document.getElementById('result');
+  const inputSection = document.getElementById('inputSection');
   
+  clearInterval(timer);
   inputSection.style.display = 'none';
   result.style.display = 'block';
-  result.textContent = userAnswer.toLowerCase() === correctAnswer.toLowerCase() 
-    ? 'Correct!' 
-    : `Wrong! The answer was ${correctAnswer}`;
-  playAgain.style.display = 'block';
+
+  if (userAnswer.toLowerCase() === currentCountry.name.toLowerCase()) {
+    score++;
+    result.textContent = 'Correct! +1 point';
+  } else {
+    result.textContent = `Wrong! The answer was ${currentCountry.name}`;
+  }
+
+  document.getElementById('score').textContent = score;
+  setTimeout(nextRound, 2000);
 });
 
 document.getElementById('playAgain').addEventListener('click', () => {
+  score = 0;
+  currentRound = 0;
   location.reload();
 });
 
