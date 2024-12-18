@@ -127,6 +127,10 @@ document.getElementById('playAgain').addEventListener('click', () => {
   document.getElementById('uploadSection').style.display = 'none';
   document.getElementById('result').style.display = 'none';
   document.getElementById('playAgain').style.display = 'none';
+  document.getElementById('viewLeaderboardBtn').style.display = 'none';
+  document.getElementById('addCountryBtn').style.display = 'none';
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('gameScreen').style.display = 'block';
   startGame();
 });
 
