@@ -1,12 +1,23 @@
 
 let timer;
-const correctAnswer = 'France';
+let currentAnswer;
 
-function startGame() {
+async function getRandomImage() {
+  const response = await fetch('/api/random-image');
+  const data = await response.json();
+  return data;
+}
+
+async function startGame() {
   const image = document.getElementById('countryImage');
   const timerDisplay = document.getElementById('timeLeft');
   const inputSection = document.getElementById('inputSection');
   let timeLeft = 5;
+
+  // Get random image and its answer
+  const imageData = await getRandomImage();
+  image.src = imageData.url;
+  currentAnswer = imageData.answer;
 
   image.style.display = 'block';
   timerDisplay.textContent = timeLeft;
@@ -31,9 +42,9 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   
   inputSection.style.display = 'none';
   result.style.display = 'block';
-  result.textContent = userAnswer.toLowerCase() === correctAnswer.toLowerCase() 
+  result.textContent = userAnswer.toLowerCase() === currentAnswer.toLowerCase() 
     ? 'Correct!' 
-    : `Wrong! The answer was ${correctAnswer}`;
+    : `Wrong! The answer was ${currentAnswer}`;
   playAgain.style.display = 'block';
 });
 

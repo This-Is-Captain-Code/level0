@@ -9,6 +9,20 @@ Devvit.addCustomPostType({
   render: (context) => {
     return (
       <vstack height="100%">
+        <hstack>
+          <button 
+            onPress={async () => {
+              const result = await context.ui.showFilePicker({
+                acceptedFileTypes: ['image/jpeg', 'image/png'],
+              });
+              if (result) {
+                await context.objects.put(`images/${result.name}`, result);
+              }
+            }}
+          >
+            Upload Image
+          </button>
+        </hstack>
         <webview
           id="geoGuessr"
           url="page.html"
