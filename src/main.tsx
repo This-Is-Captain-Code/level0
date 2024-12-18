@@ -1,7 +1,34 @@
 
 import { Devvit } from '@devvit/public-api';
 
-Devvit.configure({ redditAPI: true });
+
+import { File } from '@devvit/public-api';
+
+Devvit.addPostEndpoint({
+  path: '/api/upload',
+  method: 'POST',
+  handler: async (request, context) => {
+    const formData = await request.formData();
+    const image = formData.get('image') as File;
+    const countryName = formData.get('countryName') as string;
+
+    if (!image || !countryName) {
+      return new Response('Missing image or country name', { status: 400 });
+    }
+
+    const imageData = await image.arrayBuffer();
+    const fileName = `${countryName.toLowerCase()}-${Date.now()}.jpg`;
+    
+    await context.objectStore.put(fileName, imageData);
+    const imageUrl = await context.objectStore.getUrl(fileName);
+
+    return new Response(JSON.stringify({ imageUrl }), {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+});
+
+Devvit.configure({ redditAPI: true, objectStore: true });
 
 Devvit.addCustomPostType({
   name: 'GeoGuessr Game',

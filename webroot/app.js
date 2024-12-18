@@ -128,7 +128,7 @@ document.getElementById('playAgain').addEventListener('click', () => {
   startGame();
 });
 
-document.getElementById('uploadBtn').addEventListener('click', () => {
+document.getElementById('uploadBtn').addEventListener('click', async () => {
   const countryName = document.getElementById('countryName').value;
   const fileInput = document.getElementById('countryImageUpload');
   const file = fileInput.files[0];
@@ -138,19 +138,32 @@ document.getElementById('uploadBtn').addEventListener('click', () => {
     return;
   }
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
+  try {
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('countryName', countryName);
+
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) throw new Error('Upload failed');
+    
+    const data = await response.json();
     const newCountry = {
       name: countryName,
-      image: e.target.result
+      image: data.imageUrl
     };
+    
     countries.push(newCountry);
     unusedCountries.push(newCountry);
     alert('Country added successfully!');
     document.getElementById('countryName').value = '';
     fileInput.value = '';
-  };
-  reader.readAsDataURL(file);
+  } catch (error) {
+    alert('Failed to upload image: ' + error.message);
+  }
 });
 
 window.onload = startGame;
