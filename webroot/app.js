@@ -1,29 +1,6 @@
 
 let timer;
-let correctAnswer = '';
-let gameImage = '';
-
-document.getElementById('createBtn').addEventListener('click', () => {
-  const fileInput = document.getElementById('imageUpload');
-  const locationInput = document.getElementById('correctLocation');
-  
-  if (fileInput.files.length > 0 && locationInput.value) {
-    const file = fileInput.files[0];
-    const reader = new FileReader();
-    
-    reader.onload = function(e) {
-      gameImage = e.target.result;
-      correctAnswer = locationInput.value;
-      document.getElementById('createScreen').style.display = 'none';
-      document.getElementById('gameScreen').style.display = 'block';
-      startGame();
-    };
-    
-    reader.readAsDataURL(file);
-  } else {
-    alert('Please upload an image and enter the correct location');
-  }
-});
+const correctAnswer = 'France';
 
 function startGame() {
   const image = document.getElementById('countryImage');
@@ -31,7 +8,6 @@ function startGame() {
   const inputSection = document.getElementById('inputSection');
   let timeLeft = 5;
 
-  image.src = gameImage;
   image.style.display = 'block';
   timerDisplay.textContent = timeLeft;
 
@@ -64,3 +40,5 @@ document.getElementById('submitBtn').addEventListener('click', () => {
 document.getElementById('playAgain').addEventListener('click', () => {
   location.reload();
 });
+
+window.onload = startGame;
