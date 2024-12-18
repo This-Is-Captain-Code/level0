@@ -35,6 +35,19 @@ function startGame() {
   image.style.display = 'block';
   timerDisplay.textContent = timeLeft;
   scoreDisplay.textContent = score;
+  
+  const charBoxes = document.getElementById('charBoxes');
+  charBoxes.innerHTML = '';
+  for (let i = 0; i < currentCountry.name.length; i++) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.maxLength = 1;
+    input.className = 'char-box';
+    input.dataset.index = i;
+    input.addEventListener('input', handleCharInput);
+    input.addEventListener('keydown', handleKeyDown);
+    charBoxes.appendChild(input);
+  }
 
   timer = setInterval(() => {
     timeLeft--;
@@ -53,11 +66,11 @@ function nextRound() {
   const result = document.getElementById('result');
   const playAgain = document.getElementById('playAgain');
   const inputSection = document.getElementById('inputSection');
-  const answer = document.getElementById('answer');
+  const charBoxes = document.getElementById('charBoxes');
 
   result.style.display = 'none';
   inputSection.style.display = 'none';
-  answer.value = '';
+  charBoxes.innerHTML = '';
 
   if (currentRound < 5) {
     startGame();
@@ -68,8 +81,24 @@ function nextRound() {
   }
 }
 
+function handleCharInput(e) {
+  const currentBox = e.target;
+  if (currentBox.value) {
+    const nextBox = currentBox.nextElementSibling;
+    if (nextBox) nextBox.focus();
+  }
+}
+
+function handleKeyDown(e) {
+  if (e.key === 'Backspace' && !e.target.value) {
+    const prevBox = e.target.previousElementSibling;
+    if (prevBox) prevBox.focus();
+  }
+}
+
 document.getElementById('submitBtn').addEventListener('click', () => {
-  const userAnswer = document.getElementById('answer').value;
+  const boxes = document.querySelectorAll('.char-box');
+  const userAnswer = Array.from(boxes).map(box => box.value).join('');
   const result = document.getElementById('result');
   const inputSection = document.getElementById('inputSection');
   
