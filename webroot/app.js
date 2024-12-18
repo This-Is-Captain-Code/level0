@@ -1,11 +1,10 @@
 
 let timer;
-let currentAnswer;
+let currentGame;
 
-async function getRandomImage() {
-  const response = await fetch('/api/random-image');
-  const data = await response.json();
-  return data;
+async function getCurrentGame() {
+  const response = await fetch('/api/current_game');
+  return response.json();
 }
 
 async function startGame() {
@@ -14,10 +13,13 @@ async function startGame() {
   const inputSection = document.getElementById('inputSection');
   let timeLeft = 5;
 
-  // Get random image and its answer
-  const imageData = await getRandomImage();
-  image.src = imageData.url;
-  currentAnswer = imageData.answer;
+  try {
+    currentGame = await getCurrentGame();
+    image.src = currentGame.url;
+  } catch (err) {
+    console.error('Failed to fetch game data:', err);
+    return;
+  }
 
   image.style.display = 'block';
   timerDisplay.textContent = timeLeft;
@@ -42,9 +44,9 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   
   inputSection.style.display = 'none';
   result.style.display = 'block';
-  result.textContent = userAnswer.toLowerCase() === currentAnswer.toLowerCase() 
+  result.textContent = userAnswer.toLowerCase() === currentGame.answer.toLowerCase() 
     ? 'Correct!' 
-    : `Wrong! The answer was ${currentAnswer}`;
+    : `Wrong! The answer was ${currentGame.answer}`;
   playAgain.style.display = 'block';
 });
 
