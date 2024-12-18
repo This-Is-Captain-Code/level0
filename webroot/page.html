@@ -9,8 +9,7 @@
 <body>
   <div class="container">
     <div id="startScreen">
-      <button id="startBtn">Start Game</button>
-      <button id="viewLeaderboardBtn">View Leaderboard</button>
+      <button id="startBtn" class="primary-button">Start Game</button>
     </div>
     <div id="leaderboard" style="display: none;">
       <h2>Top Scores</h2>
@@ -35,8 +34,11 @@
         <button id="submitBtn">Submit Answer</button>
       </div>
       <div id="result" style="display: none;"></div>
-      <button id="playAgain" style="display: none;">Play Again</button>
-      <button id="addCountryBtn" style="display: none;">Add New Country</button>
+      <div class="button-group">
+        <button id="playAgain" style="display: none;">Play Again</button>
+        <button id="viewLeaderboardBtn" style="display: none;">View Leaderboard</button>
+        <button id="addCountryBtn" style="display: none;">Add New Country</button>
+      </div>
     </div>
   </div>
   <script src="app.js"></script>

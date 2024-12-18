@@ -78,6 +78,7 @@ function nextRound() {
     result.style.display = 'block';
     result.textContent = `Game Over! Final Score: ${score}/5`;
     playAgain.style.display = 'block';
+    document.getElementById('viewLeaderboardBtn').style.display = 'block';
     document.getElementById('addCountryBtn').style.display = 'block';
     addToLeaderboard(score);
   }
