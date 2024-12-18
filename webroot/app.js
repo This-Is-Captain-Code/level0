@@ -1,12 +1,15 @@
 
 let timer;
-const countries = [
-  { image: 'assets/france.jpg', name: 'France' },
-  { image: 'assets/japan.jpg', name: 'Japan' },
-  { image: 'assets/usa.jpg', name: 'USA' },
-  { image: 'assets/uk.jpg', name: 'UK' },
-  { image: 'assets/australia.jpg', name: 'Australia' }
-];
+let countries = [];
+
+// Load countries data from file
+fetch('data.json')
+  .then(response => response.json())
+  .then(data => {
+    countries = data.countries;
+    unusedCountries = [...countries];
+    startGame();
+  });
 
 let currentCountry;
 let score = 0;
@@ -146,9 +149,19 @@ document.getElementById('uploadBtn').addEventListener('click', () => {
     };
     countries.push(newCountry);
     unusedCountries.push(newCountry);
-    alert('Country added successfully!');
-    document.getElementById('countryName').value = '';
-    fileInput.value = '';
+    
+    // Save updated data to file
+    fetch('/save-data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ countries })
+    }).then(() => {
+      alert('Country added successfully!');
+      document.getElementById('countryName').value = '';
+      fileInput.value = '';
+    });
   };
   reader.readAsDataURL(file);
 });

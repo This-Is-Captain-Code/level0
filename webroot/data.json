@@ -1,0 +1,10 @@
+
+{
+  "countries": [
+    {"image": "assets/france.jpg", "name": "France"},
+    {"image": "assets/japan.jpg", "name": "Japan"},
+    {"image": "assets/usa.jpg", "name": "USA"},
+    {"image": "assets/uk.jpg", "name": "UK"},
+    {"image": "assets/australia.jpg", "name": "Australia"}
+  ]
+}
