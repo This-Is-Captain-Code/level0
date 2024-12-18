@@ -1,25 +1,12 @@
 
 let timer;
-let currentGame;
+const correctAnswer = 'France';
 
-async function getCurrentGame() {
-  const response = await fetch('/api/current_game');
-  return response.json();
-}
-
-async function startGame() {
+function startGame() {
   const image = document.getElementById('countryImage');
   const timerDisplay = document.getElementById('timeLeft');
   const inputSection = document.getElementById('inputSection');
   let timeLeft = 5;
-
-  try {
-    currentGame = await getCurrentGame();
-    image.src = currentGame.url;
-  } catch (err) {
-    console.error('Failed to fetch game data:', err);
-    return;
-  }
 
   image.style.display = 'block';
   timerDisplay.textContent = timeLeft;
@@ -44,9 +31,9 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   
   inputSection.style.display = 'none';
   result.style.display = 'block';
-  result.textContent = userAnswer.toLowerCase() === currentGame.answer.toLowerCase() 
+  result.textContent = userAnswer.toLowerCase() === correctAnswer.toLowerCase() 
     ? 'Correct!' 
-    : `Wrong! The answer was ${currentGame.answer}`;
+    : `Wrong! The answer was ${correctAnswer}`;
   playAgain.style.display = 'block';
 });
 
