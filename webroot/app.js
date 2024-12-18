@@ -78,8 +78,8 @@ function nextRound() {
     result.style.display = 'block';
     result.textContent = `Game Over! Final Score: ${score}/5`;
     playAgain.style.display = 'block';
+    document.getElementById('uploadScreen').style.display = 'block';
     document.getElementById('viewLeaderboardBtn').style.display = 'block';
-    document.getElementById('addCountryBtn').style.display = 'block';
     addToLeaderboard(score);
   }
 }
@@ -127,10 +127,6 @@ document.getElementById('playAgain').addEventListener('click', () => {
   document.getElementById('uploadScreen').style.display = 'none';
   document.getElementById('result').style.display = 'none';
   document.getElementById('playAgain').style.display = 'none';
-  document.getElementById('viewLeaderboardBtn').style.display = 'none';
-  document.getElementById('addCountryBtn').style.display = 'none';
-  document.getElementById('startScreen').style.display = 'none';
-  document.getElementById('gameScreen').style.display = 'block';
   startGame();
 });
 
