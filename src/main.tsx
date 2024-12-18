@@ -7,14 +7,22 @@ Devvit.addCustomPostType({
   name: 'GeoGuessr Game',
   height: 'tall',
   render: (context) => {
-    const metadata = context.postData.metadata;
+    // Handle case when post isn't created yet
+    if (!context.postData) {
+      return (
+        <vstack gap="medium" alignment="center middle">
+          <text>Create a new GeoGuessr game using the subreddit menu!</text>
+        </vstack>
+      );
+    }
+
+    const metadata = context.postData.metadata || {};
     const isCreator = context.userId === context.postData.authorId;
 
-    if (!metadata?.imageUrl) {
+    if (!metadata.imageUrl) {
       return (
         <vstack gap="medium">
-          <image url="assets/logo.png" height="100px" />
-          <text>Loading game data...</text>
+          <text>No image provided for this game.</text>
         </vstack>
       );
     }
