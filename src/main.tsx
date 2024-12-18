@@ -1,5 +1,5 @@
 
-import { Devvit } from '@devvit/public-api';
+import { Devvit, useState } from '@devvit/public-api';
 
 Devvit.configure({ redditAPI: true });
 
