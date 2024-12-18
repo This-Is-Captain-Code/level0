@@ -3,18 +3,27 @@ let timer;
 let correctAnswer = '';
 let gameImage = '';
 
-window.onload = () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const mode = urlParams.get('mode');
-  const imageUrl = urlParams.get('imageUrl');
-  const location = urlParams.get('location');
-
-  if (mode === 'play' && imageUrl && location) {
-    gameImage = decodeURIComponent(imageUrl);
-    correctAnswer = decodeURIComponent(location);
-    startGame();
+document.getElementById('createBtn').addEventListener('click', () => {
+  const fileInput = document.getElementById('imageUpload');
+  const locationInput = document.getElementById('correctLocation');
+  
+  if (fileInput.files.length > 0 && locationInput.value) {
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      gameImage = e.target.result;
+      correctAnswer = locationInput.value;
+      document.getElementById('createScreen').style.display = 'none';
+      document.getElementById('gameScreen').style.display = 'block';
+      startGame();
+    };
+    
+    reader.readAsDataURL(file);
+  } else {
+    alert('Please upload an image and enter the correct location');
   }
-};
+});
 
 function startGame() {
   const image = document.getElementById('countryImage');
