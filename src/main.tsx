@@ -8,12 +8,13 @@ const form = Devvit.createForm({
     { name: 'title', type: 'string', label: 'Post Title' },
     { name: 'image', type: 'image', label: 'Location Image' },
     { name: 'answer', type: 'string', label: 'Correct Answer' }
-  ],
-  onSubmit: async (event, context) => {
-    const { title, image, answer } = event.values;
-    return { title, image, answer };
-  }
+  ]
 });
+
+form.onSubmit = async (event, context) => {
+  const { title, image, answer } = event.values;
+  return { title, image, answer };
+};
 
 Devvit.addMenuItem({
   label: 'Create GeoGuessr Post',
