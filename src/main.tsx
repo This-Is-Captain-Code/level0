@@ -3,70 +3,72 @@ import { Devvit } from '@devvit/public-api';
 
 Devvit.configure({ redditAPI: true });
 
-const form = Devvit.createForm({
+const createPostForm = Devvit.createForm({
   fields: [
     { name: 'title', type: 'string', label: 'Post Title' },
-    { name: 'image', type: 'image', label: 'Location Image' },
+    { name: 'image', type: 'image', label: 'Upload Image' },
     { name: 'answer', type: 'string', label: 'Correct Answer' }
-  ],
-  onSubmit: async (event, context) => {
-    const { title, image, answer } = event.values;
-    return { title, image, answer };
-  }
+  ]
 });
 
 Devvit.addMenuItem({
-  label: 'Create GeoGuessr Post',
+  label: 'Create Image Guessing Game',
   location: 'subreddit',
   onPress: async (event, context) => {
-    const response = await context.ui.showForm(form);
-    if (!response) return;
+    const formResponse = await context.ui.showForm(createPostForm);
+    if (!formResponse) return;
 
     await context.reddit.submitPost({
-      title: response.title,
+      title: formResponse.title,
       subredditName: context.subredditName,
       kind: 'custom',
       metadata: {
-        imageUrl: response.image,
-        answer: response.answer.toLowerCase(),
-      },
+        imageUrl: formResponse.image,
+        answer: formResponse.answer.toLowerCase()
+      }
     });
-  },
+  }
 });
 
 Devvit.addCustomPostType({
-  name: 'GeoGuessr Game',
-  height: 'tall',
+  name: 'Image Guessing Game',
   render: (context) => {
-    if (!context.postData) {
-      return (
-        <vstack gap="medium" alignment="center middle">
-          <text>Create a new GeoGuessr game using the subreddit menu!</text>
-        </vstack>
-      );
+    if (!context.postData?.metadata?.imageUrl) {
+      return <text>Loading game...</text>;
     }
 
-    const metadata = context.postData.metadata || {};
+    const metadata = context.postData.metadata;
     const isCreator = context.userId === context.postData.authorId;
 
-    if (!metadata.imageUrl) {
-      return (
-        <vstack gap="medium">
-          <text>No image provided for this game.</text>
-        </vstack>
-      );
-    }
-
     return (
-      <vstack height="100%">
-        <webview
-          id="geoGuessr"
-          url={`page.html?imageUrl=${metadata.imageUrl}&answer=${isCreator ? metadata.answer : ''}`}
-          height="100%"
-        />
+      <vstack gap="medium">
+        <image src={metadata.imageUrl} />
+        {!isCreator && (
+          <hstack gap="medium">
+            <textfield
+              id="guess"
+              placeholder="Enter your guess"
+            />
+            <button
+              onPress={async (e, ctx) => {
+                const guess = await ctx.ui.getElementValue('guess');
+                if (guess.toLowerCase() === metadata.answer) {
+                  ctx.ui.showToast('Correct! You got it!');
+                } else {
+                  ctx.ui.showToast('Wrong guess, try again!');
+                }
+              }}
+            >
+              Submit Guess
+            </button>
+          </hstack>
+        )}
+        {isCreator && (
+          <text>Answer: {metadata.answer}</text>
+        )}
       </vstack>
     );
-  },
+  }
 });
 
 export default Devvit;
