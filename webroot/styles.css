@@ -40,6 +40,17 @@
   border-radius: 4px;
 }
 
+#uploadSection {
+  margin-top: 40px;
+  padding: 20px;
+  border-top: 1px solid #ccc;
+}
+
+#uploadSection input {
+  margin: 10px;
+  padding: 5px;
+}
+
 #charBoxes {
   margin-bottom: 15px;
 }
@@ -52,4 +63,15 @@ button {
   color: white;
   border: none;
   border-radius: 4px;
+}
+
+#uploadSection {
+  margin-top: 40px;
+  padding: 20px;
+  border-top: 1px solid #ccc;
+}
+
+#uploadSection input {
+  margin: 10px;
+  padding: 5px;
 }

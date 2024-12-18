@@ -124,4 +124,29 @@ document.getElementById('playAgain').addEventListener('click', () => {
   location.reload();
 });
 
+document.getElementById('uploadBtn').addEventListener('click', () => {
+  const countryName = document.getElementById('countryName').value;
+  const fileInput = document.getElementById('countryImageUpload');
+  const file = fileInput.files[0];
+
+  if (!countryName || !file) {
+    alert('Please provide both country name and image');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const newCountry = {
+      name: countryName,
+      image: e.target.result
+    };
+    countries.push(newCountry);
+    unusedCountries.push(newCountry);
+    alert('Country added successfully!');
+    document.getElementById('countryName').value = '';
+    fileInput.value = '';
+  };
+  reader.readAsDataURL(file);
+});
+
 window.onload = startGame;
