@@ -3,6 +3,12 @@ import { Devvit } from '@devvit/public-api';
 
 Devvit.configure({ redditAPI: true });
 
+Devvit.addServerEndpoint({
+  path: '/api/random-image',
+  method: 'GET',
+  handler: handleRandomImage,
+});
+
 Devvit.addCustomPostType({
   name: 'GeoGuessr Game',
   height: 'tall',
