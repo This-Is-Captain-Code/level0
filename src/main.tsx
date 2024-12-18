@@ -3,70 +3,58 @@ import { Devvit } from '@devvit/public-api';
 
 Devvit.configure({ redditAPI: true });
 
-const createPostForm = Devvit.createForm({
-  fields: [
-    { name: 'title', type: 'string', label: 'Post Title' },
-    { name: 'image', type: 'image', label: 'Upload Image' },
-    { name: 'answer', type: 'string', label: 'Correct Answer' }
-  ]
-});
-
 Devvit.addMenuItem({
-  label: 'Create Image Guessing Game',
+  label: 'Create GeoGuessr Game',
   location: 'subreddit',
   onPress: async (event, context) => {
-    const formResponse = await context.ui.showForm(createPostForm);
-    if (!formResponse) return;
+    const modal = await context.ui.showModal({
+      title: 'Create a GeoGuessr Game',
+      acceptLabel: 'Create Post',
+      dismissLabel: 'Cancel',
+      children: (
+        <vstack gap="medium">
+          <textfield id="title" placeholder="Enter post title" />
+          <imageinput id="image" label="Upload Location Image" />
+          <textfield id="answer" placeholder="Enter correct location" />
+        </vstack>
+      )
+    });
+
+    if (!modal) return;
+
+    const title = await context.ui.getElementValue('title');
+    const image = await context.ui.getElementValue('image');
+    const answer = await context.ui.getElementValue('answer');
+
+    if (!title || !image || !answer) {
+      return context.ui.showToast('Please fill in all fields');
+    }
 
     await context.reddit.submitPost({
-      title: formResponse.title,
+      title,
       subredditName: context.subredditName,
       kind: 'custom',
       metadata: {
-        imageUrl: formResponse.image,
-        answer: formResponse.answer.toLowerCase()
+        imageUrl: image,
+        answer: answer.toLowerCase()
       }
     });
   }
 });
 
 Devvit.addCustomPostType({
-  name: 'Image Guessing Game',
+  name: 'GeoGuessr Game',
+  height: 'tall',
   render: (context) => {
     if (!context.postData?.metadata?.imageUrl) {
       return <text>Loading game...</text>;
     }
 
-    const metadata = context.postData.metadata;
-    const isCreator = context.userId === context.postData.authorId;
-
     return (
-      <vstack gap="medium">
-        <image src={metadata.imageUrl} />
-        {!isCreator && (
-          <hstack gap="medium">
-            <textfield
-              id="guess"
-              placeholder="Enter your guess"
-            />
-            <button
-              onPress={async (e, ctx) => {
-                const guess = await ctx.ui.getElementValue('guess');
-                if (guess.toLowerCase() === metadata.answer) {
-                  ctx.ui.showToast('Correct! You got it!');
-                } else {
-                  ctx.ui.showToast('Wrong guess, try again!');
-                }
-              }}
-            >
-              Submit Guess
-            </button>
-          </hstack>
-        )}
-        {isCreator && (
-          <text>Answer: {metadata.answer}</text>
-        )}
-      </vstack>
+      <webview 
+        url={`page.html?imageUrl=${context.postData.metadata.imageUrl}&answer=${context.postData.metadata.answer}`}
+        height="500px"
+      />
     );
   }
 });
