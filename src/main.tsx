@@ -3,29 +3,13 @@ import { Devvit } from '@devvit/public-api';
 
 Devvit.configure({ redditAPI: true });
 
-const createGeoGuessrForm = Devvit.createForm({
-  title: "Create GeoGuessr Post",
+const GeoGuessrForm = Devvit.createForm({
   fields: [
-    {
-      name: 'title',
-      label: 'Post Title',
-      type: 'string',
-      required: true,
-    },
-    {
-      name: 'image',
-      label: 'Location Image',
-      type: 'image',
-      required: true,
-    },
-    {
-      name: 'answer',
-      label: 'Correct Answer',
-      type: 'string',
-      required: true,
-    },
+    { name: 'title', type: 'string', label: 'Post Title' },
+    { name: 'image', type: 'image', label: 'Location Image' },
+    { name: 'answer', type: 'string', label: 'Correct Answer' }
   ],
-  onSubmit: async (event, context) => {
+  async onSubmit(event, context) {
     const { title, image, answer } = event.values;
     await context.reddit.submitPost({
       title,
@@ -36,14 +20,14 @@ const createGeoGuessrForm = Devvit.createForm({
         answer: answer.toLowerCase(),
       },
     });
-  }
+  },
 });
 
 Devvit.addMenuItem({
   label: 'Create GeoGuessr Post',
   location: 'subreddit',
   onPress: async (event, context) => {
-    await context.ui.showForm(createGeoGuessrForm);
+    await context.ui.showForm(GeoGuessrForm);
   },
 });
 
