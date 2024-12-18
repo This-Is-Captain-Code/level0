@@ -79,6 +79,7 @@ function nextRound() {
     result.textContent = `Game Over! Final Score: ${score}/5`;
     playAgain.style.display = 'block';
     document.getElementById('uploadSection').style.display = 'block';
+    addToLeaderboard(score);
   }
 }
 
@@ -153,4 +154,35 @@ document.getElementById('uploadBtn').addEventListener('click', () => {
   reader.readAsDataURL(file);
 });
 
-window.onload = startGame;
+function updateLeaderboard() {
+  const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+  const leaderboardList = document.getElementById('leaderboardList');
+  leaderboardList.innerHTML = '';
+  
+  leaderboard
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5)
+    .forEach((entry, index) => {
+      const div = document.createElement('div');
+      div.className = 'leaderboard-entry';
+      div.textContent = `${index + 1}. Score: ${entry.score}`;
+      leaderboardList.appendChild(div);
+    });
+}
+
+function addToLeaderboard(score) {
+  const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+  leaderboard.push({ score, date: new Date().toISOString() });
+  localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+  updateLeaderboard();
+}
+
+document.getElementById('startBtn').addEventListener('click', () => {
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('gameScreen').style.display = 'block';
+  startGame();
+});
+
+window.onload = () => {
+  updateLeaderboard();
+};
