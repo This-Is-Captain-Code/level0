@@ -3,15 +3,7 @@ let timer;
 let correctAnswer = '';
 let gameImage = '';
 
-// Function to communicate with Reddit
-async function sendMessage(type, data) {
-  return await window.webkit.messageHandlers.replit.postMessage({
-    type,
-    ...data
-  });
-}
-
-document.getElementById('createBtn').addEventListener('click', async () => {
+document.getElementById('createBtn').addEventListener('click', () => {
   const fileInput = document.getElementById('imageUpload');
   const locationInput = document.getElementById('correctLocation');
   
@@ -19,15 +11,9 @@ document.getElementById('createBtn').addEventListener('click', async () => {
     const file = fileInput.files[0];
     const reader = new FileReader();
     
-    reader.onload = async function(e) {
+    reader.onload = function(e) {
       gameImage = e.target.result;
       correctAnswer = locationInput.value;
-      
-      await sendMessage('submitChallenge', {
-        image: gameImage,
-        answer: correctAnswer
-      });
-      
       document.getElementById('createScreen').style.display = 'none';
       document.getElementById('gameScreen').style.display = 'block';
       startGame();
@@ -39,12 +25,7 @@ document.getElementById('createBtn').addEventListener('click', async () => {
   }
 });
 
-async function startGame() {
-  const response = await sendMessage('loadChallenge', {});
-  if (response && response.image) {
-    gameImage = response.image;
-  }
-  
+function startGame() {
   const image = document.getElementById('countryImage');
   const timerDisplay = document.getElementById('timeLeft');
   const inputSection = document.getElementById('inputSection');
@@ -66,31 +47,20 @@ async function startGame() {
   }, 1000);
 }
 
-document.getElementById('submitBtn').addEventListener('click', async () => {
+document.getElementById('submitBtn').addEventListener('click', () => {
   const userAnswer = document.getElementById('answer').value;
   const result = document.getElementById('result');
   const playAgain = document.getElementById('playAgain');
   const inputSection = document.getElementById('inputSection');
   
-  const response = await sendMessage('checkAnswer', { guess: userAnswer });
-  
   inputSection.style.display = 'none';
   result.style.display = 'block';
-  result.textContent = response.correct ? 'Correct!' : 'Wrong!';
+  result.textContent = userAnswer.toLowerCase() === correctAnswer.toLowerCase() 
+    ? 'Correct!' 
+    : `Wrong! The answer was ${correctAnswer}`;
   playAgain.style.display = 'block';
 });
 
 document.getElementById('playAgain').addEventListener('click', () => {
   location.reload();
-});
-
-// Load challenge on page load if we're viewing an existing post
-window.addEventListener('load', async () => {
-  const response = await sendMessage('loadChallenge', {});
-  if (response && response.image) {
-    gameImage = response.image;
-    document.getElementById('createScreen').style.display = 'none';
-    document.getElementById('gameScreen').style.display = 'block';
-    startGame();
-  }
 });
