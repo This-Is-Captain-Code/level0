@@ -1,14 +1,29 @@
 
 let timer;
-const correctAnswer = 'France';
+let correctAnswer;
+
+function getUrlParams() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    image: params.get('image'),
+    answer: params.get('answer')
+  };
+}
 
 function startGame() {
-  const image = document.getElementById('countryImage');
+  const { image, answer } = getUrlParams();
+  correctAnswer = answer || 'France';
+  
+  const imageElement = document.getElementById('countryImage');
+  if (image) {
+    imageElement.src = image;
+  }
+  
   const timerDisplay = document.getElementById('timeLeft');
   const inputSection = document.getElementById('inputSection');
   let timeLeft = 5;
 
-  image.style.display = 'block';
+  imageElement.style.display = 'block';
   timerDisplay.textContent = timeLeft;
 
   timer = setInterval(() => {
@@ -17,7 +32,7 @@ function startGame() {
     
     if (timeLeft === 0) {
       clearInterval(timer);
-      image.style.display = 'none';
+      imageElement.style.display = 'none';
       inputSection.style.display = 'block';
     }
   }, 1000);
